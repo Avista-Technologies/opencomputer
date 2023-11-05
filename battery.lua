@@ -57,7 +57,7 @@ end
 
 while true do
   local charge = mfe.getEnergy()
-  local maxCharge = mfe.getMaxEnergy()
+  local maxCharge = mfe.getCapacity()
   local status = checkStatus(charge, maxCharge)
   drawGUI(charge, maxCharge, status)
   os.sleep(2)
