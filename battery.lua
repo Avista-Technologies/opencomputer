@@ -9,45 +9,58 @@ if not component.isAvailable("ic2_mfe") then
   os.exit()
 end
 
-local function drawGUI()
-  local fill = mfe.getEnergy()
-  gpu.setResolution(40, 4)
-  gpu.fill(1, 1, 40, 4, " ")
+local function drawGUI(charge, maxCharge, status)
+  gpu.setResolution(40, 20)
+  gpu.fill(1, 1, 40, 20, " ")
   
-  -- Draw the border
+  -- Draw the grid
   gpu.setBackground(0x333333)
-  gpu.fill(1, 1, 40, 1, " ")
-  gpu.fill(1, 4, 40, 1, " ")
-  gpu.fill(1, 2, 1, 2, " ")
-  gpu.fill(40, 2, 1, 2, " ")
+  gpu.fill(1, 1, 20, 10, " ") -- charge box
+  gpu.fill(21, 1, 20, 10, " ") -- max charge box
+  gpu.fill(1, 11, 20, 8, " ") -- change status box
+  gpu.fill(21, 11, 20, 8, " ") -- battery status box
 
-  -- Calculate the energy level bar length
-  local barLength = math.floor(fill / 50000)
-  
-  -- Draw the energy level bar
+  -- Display charge and max charge
   gpu.setBackground(0x00FF00)
-  gpu.fill(2, 2, barLength, 2, " ")
+  gpu.set(2, 2, "Charge: " .. charge .. " EU")
+  gpu.set(22, 2, "Max Charge: " .. maxCharge .. " EU")
 
-  -- Display energy level information
-  gpu.setBackground(0x333333)
-  gpu.setForeground(0xFFFFFF)
-  gpu.set(18, 2, "Energy Level: " .. fill .. " EU ")
+  -- Display whether charge is increasing, decreasing, or stable
+  gpu.set(2, 12, "Charge Status: " .. status)
+
+  -- Determine color for the battery status
+  local statusColor = 0xFFFFFF -- Default color for normal status
+  if status == "POWER LEVEL LOW" then
+    statusColor = 0xFFA500 -- Orange for low power
+  elseif status == "POWER LEVEL CRITICAL" then
+    statusColor = 0xFF0000 -- Red for critical power
+  end
+
+  -- Display battery status
+  gpu.setBackground(statusColor)
+  gpu.set(22, 12, "Battery Status: " .. status)
 end
 
-while true do
-  drawGUI()
-  os.sleep(2)
-  local fill = mfe.getEnergy()
-  
-  if fill < 2500000 then
-    print("POWER LEVEL LOW")
+local function checkStatus(charge, maxCharge)
+  local status = "normal"
+  if charge < 2500000 then
+    status = "POWER LEVEL LOW"
     computer.beep(550, 1)
-    if fill < 1500000 then
-      print("POWER LEVEL CRITICAL")
+    if charge < 1500000 then
+      status = "POWER LEVEL CRITICAL"
       computer.beep(1000, 0.15)
       computer.beep(600, 0.15)
       computer.beep(1000, 0.15)
       computer.beep(600, 0.15)
     end
   end
+  return status
+end
+
+while true do
+  local charge = mfe.getEnergy()
+  local maxCharge = mfe.getMaxEnergy()
+  local status = checkStatus(charge, maxCharge)
+  drawGUI(charge, maxCharge, status)
+  os.sleep(2)
 end
