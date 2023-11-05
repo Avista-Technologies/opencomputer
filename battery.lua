@@ -11,8 +11,9 @@ end
 
 local function drawGUI(charge, maxCharge, status)
   gpu.setResolution(40, 20)
+  gpu.setBackground(0x0000AA)  -- Set background color to blue
   gpu.fill(1, 1, 40, 20, " ")
-  
+
   -- Draw the grid
   gpu.setBackground(0x333333)
   gpu.fill(1, 1, 20, 10, " ") -- charge box
@@ -59,7 +60,7 @@ end
 
 while true do
   local charge = mfe.getEnergy()
-  local maxCharge = mfe.getCapacity()
+  local maxCharge = mfe.getMaxEnergy()
   local status = checkStatus(charge, maxCharge)
   drawGUI(charge, maxCharge, status)
   os.sleep(2)
