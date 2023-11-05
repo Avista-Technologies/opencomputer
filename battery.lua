@@ -11,18 +11,15 @@ end
 
 local function drawGUI(charge, maxCharge, status)
   gpu.setResolution(40, 20)
-  gpu.setBackground(0x0000AA)  -- Set background color to blue
-  gpu.fill(1, 1, 40, 20, " ")
+  gpu.fill(1, 1, 40, 20, " ")  -- Clear the screen
 
   -- Draw the grid
-  gpu.setBackground(0x333333)
   gpu.fill(1, 1, 20, 10, " ") -- charge box
   gpu.fill(21, 1, 20, 10, " ") -- max charge box
   gpu.fill(1, 11, 20, 8, " ") -- change status box
   gpu.fill(21, 11, 20, 8, " ") -- battery status box
 
   -- Display charge and max charge
-  gpu.setBackground(0x00FF00)
   gpu.set(2, 2, "Charge: " .. charge .. " EU")
   gpu.set(22, 2, "Max Charge: " .. maxCharge .. " EU")
 
@@ -38,7 +35,7 @@ local function drawGUI(charge, maxCharge, status)
   end
 
   -- Display battery status
-  gpu.setBackground(statusColor)
+  gpu.setForeground(statusColor)
   gpu.set(22, 12, "Battery Status: " .. status)
 end
 
