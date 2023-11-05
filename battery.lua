@@ -60,7 +60,7 @@ local function checkStatus(charge, maxCharge)
 end
 
 while true do
-  local charge = mfe.getEnergy()
+  local charge = math.floor(mfe.getEnergy()+0.5)
   local maxCharge = mfe.getCapacity()
   local status = checkStatus(charge, maxCharge)
   drawGUI(charge, maxCharge, status)
