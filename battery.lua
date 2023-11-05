@@ -20,11 +20,14 @@ local function drawGUI(charge, maxCharge, status)
   gpu.fill(21, 11, 20, 8, " ") -- battery status box
 
   -- Display charge and max charge
-  gpu.set(2, 2, "Charge:\n" .. charge .. " EU")
-  gpu.set(22, 2, "Max Charge:\n" .. maxCharge .. " EU")
+  gpu.set(2, 2, "Charge:")
+  gpu.set(2, 3, charge .. " EU")
+  gpu.set(22, 2, "Max Charge:")
+  gpu.set(22, 3, maxCharge .. " EU")
 
   -- Display whether charge is increasing, decreasing, or stable
-  gpu.set(2, 12, "Charge Status:\n" .. status)
+  gpu.set(2, 12, "Charge Status:")
+  gpu.set(2, 13, status)
 
   -- Determine color for the battery status
   local statusColor = 0xFFFFFF -- Default color for normal status
@@ -36,7 +39,8 @@ local function drawGUI(charge, maxCharge, status)
 
   -- Display battery status
   gpu.setForeground(statusColor)
-  gpu.set(22, 12, "Battery Status:\n" .. status)
+  gpu.set(22, 12, "Battery Status:")
+  gpu.set(22, 13, status)
 end
 
 local function checkStatus(charge, maxCharge)
