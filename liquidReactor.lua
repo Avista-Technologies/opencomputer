@@ -31,7 +31,7 @@ end
 
 local function checkStatus(heat, maxHeat, producesEnergy)
   local status = "Online"
-  if (heat / maxheat) >= 0.75 then 
+  if (heat / maxHeat) >= 0.75 then 
     status = "SCRAM"
   elseif (producesEnergy == false) then
     status = "Offline"
