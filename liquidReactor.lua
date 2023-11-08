@@ -42,7 +42,7 @@ end
 while true do
   local heat = reactor.getHeat()
   local maxHeat = reactor.getMaxHeat()
-  local output = reactor.getReactorEnergyOutput()
+  local output = (reactor.getReactorEnergyOutput() * 320)
   local producesEnergy = reactor.producesEnergy()
   local status = checkStatus(heat, maxHeat, producesEnergy)
   drawGUI(heat, maxHeat, status, output)
