@@ -22,7 +22,7 @@ local function drawGUI(heat, maxHeat, status, output)
 
   -- Display whether charge is increasing, decreasing, or stable
   gpu.set(2, 12, "Energy:")
-  gpu.set(2, 13, output)
+  gpu.set(2, 13, output .. " HU")
 
   -- Display battery status
   gpu.set(22, 12, "Status:")
