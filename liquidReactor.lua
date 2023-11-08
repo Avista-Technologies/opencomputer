@@ -1,56 +1,48 @@
 local os = require("os")
+local computer = require("computer")
 local component = require("component")
-local reactor = component.br_reactor
+local reactor = component.reactor_chamber
 local gpu = component.gpu
 
-local function drawGUI(heat, maxHeat, energyProduced, status)
+local function drawGUI(heat, maxHeat, status, output)
   gpu.setResolution(40, 20)
   gpu.fill(1, 1, 40, 20, " ")  -- Clear the screen
 
-  gpu.fill(1, 1, 20, 10, " ") -- heat box
-  gpu.fill(21, 1, 20, 10, " ") -- max heat box
-  gpu.fill(1, 11, 20, 8, " ") -- energy produced box
-  gpu.fill(21, 11, 20, 8, " ") -- status box
+  -- Draw the grid
+  gpu.fill(1, 1, 20, 10, " ") -- charge box
+  gpu.fill(21, 1, 20, 10, " ") -- max charge box
+  gpu.fill(1, 11, 20, 8, " ") -- change status box
+  gpu.fill(21, 11, 20, 8, " ") -- battery status box
 
+  -- Display charge and max charge
   gpu.set(2, 2, "Heat:")
-  gpu.set(2, 3, heat)
-
+  gpu.set(2, 3, heat .. " EU")
   gpu.set(22, 2, "Max Heat:")
-  gpu.set(22, 3, maxHeat)
+  gpu.set(22, 3, maxHeat .. " EU")
 
-  gpu.set(2, 12, "Energy Produced:")
-  gpu.set(2, 13, energyProduced)
+  -- Display whether charge is increasing, decreasing, or stable
+  gpu.set(2, 12, "Energy:")
+  gpu.set(2, 13, output)
 
-  local statusColor = 0xFFFFFF -- Default color for online status
-
-  if status == "SCRAM" then
-    statusColor = 0xFF0000 -- Red for SCRAM status
-  elseif status == "offline" then
-    statusColor = 0x888888 -- Gray for offline status
-  end
-
-  gpu.setForeground(statusColor)
+  -- Display battery status
   gpu.set(22, 12, "Status:")
   gpu.set(22, 13, status)
 end
 
-local function checkReactorStatus(heat, maxHeat, energyProduced)
-  local status = "online"
-
-  if (heat / maxHeat) >= 0.75 then
+local function checkStatus(heat, maxHeat, producesEnergy)
+  local status = "Online"
+  if (heat / maxheat) >= 0.75 then 
     status = "SCRAM"
-  elseif heat == 0 then
-    status = "offline"
-  end
-
+  elseif (producesEnergy == false)
+    status = "Offline"
   return status
-end
-
+    
 while true do
   local heat = reactor.getHeat()
   local maxHeat = reactor.getMaxHeat()
-  local energyProduced = reactor.getReactorEnergyOutput()
-  local status = checkReactorStatus(heat, maxHeat, energyProduced)
-  drawGUI(heat, maxHeat, energyProduced, status)
+  local output = reactor.getReactorEnergyOutput()
+  local producesEnergy = reactor.producesEnergy()
+  local status = checkStatus(heat, maxHeat, producesEnergy)
+  drawGUI(heat, maxHeat, status, output)
   os.sleep(2)
 end
