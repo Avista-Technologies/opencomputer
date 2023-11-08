@@ -35,7 +35,9 @@ local function checkStatus(heat, maxHeat, producesEnergy)
     status = "SCRAM"
   elseif (producesEnergy == false) then
     status = "Offline"
+  end
   return status
+end
     
 while true do
   local heat = reactor.getHeat()
