@@ -12,7 +12,7 @@ local function downloadFile(appName)
   end
 
   if content and content ~= "" then
-    local filePath = "/" .. appName .. ".lua"
+    local filePath = "/usr/bin" .. appName .. ".lua"
     local file = io.open(filePath, "w")
     file:write(content)
     file:close()
