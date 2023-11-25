@@ -4,14 +4,14 @@ local filesystem = require("filesystem")
 -- Function to download a file from GitHub
 local function downloadFile(appName)
   local url = "https://raw.githubusercontent.com/Avista-Technologies/opencomputer/main/" .. appName .. ".lua"
-  local response, responseCode = internet.request(url)
+  local response = internet.request(url)
 
-  if responseCode == 200 then
-    local content = ""
-    for chunk in response do
-      content = content .. chunk
-    end
+  local content = ""
+  for chunk in response do
+    content = content .. chunk
+  end
 
+  if content and content ~= "" then
     local filePath = "/" .. appName .. ".lua"
     local file = io.open(filePath, "w")
     file:write(content)
@@ -19,7 +19,7 @@ local function downloadFile(appName)
 
     print("File downloaded successfully: " .. filePath)
   else
-    print("Failed to download file. HTTP response code: " .. tostring(responseCode))
+    print("Failed to download file.")
   end
 end
 
