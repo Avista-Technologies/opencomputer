@@ -44,12 +44,12 @@ local function readFromFile()
 
   if fileNumber and fileList[fileNumber] then
     local filename = fileList[fileNumber]
-    
+
+    local file = io.open(filename, "w")
     tape.seek(-tape.getSize())  -- Move to the beginning of the tape
     local data = tape.read(tape.getSize())
 
     if data then
-      local file = io.open(filename, "w")
       file:write(data)
       file:close()
       print("File '" .. filename .. "' read from tape.")
@@ -60,6 +60,26 @@ local function readFromFile()
     print("Invalid file number.")
   end
 end
+
+-- Function to load file list from tape
+local function loadFileList()
+  tape.seek(-tape.getSize())  -- Move to the beginning of the tape
+  local data = tape.read(tape.getSize())
+  if data then
+    for filename in data:gmatch("[^\n]+") do
+      table.insert(fileList, filename)
+    end
+  end
+end
+
+-- Function to save file list to tape
+local function saveFileList()
+  tape.seek(-tape.getSize())  -- Move to the beginning of the tape
+  tape.write(table.concat(fileList, "\n"))
+end
+
+-- Load existing file list from tape
+loadFileList()
 
 -- Main program
 while true do
@@ -75,6 +95,7 @@ while true do
     io.write("Enter the filename to write to tape: ")
     local filename = io.read()
     writeToFile(filename)
+    saveFileList()
   elseif option == 2 then
     readFromFile()
   elseif option == 3 then
