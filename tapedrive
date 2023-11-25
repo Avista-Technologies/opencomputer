@@ -8,6 +8,7 @@ if not component.isAvailable("tape_drive") then
 end
 
 local tape = component.tape_drive
+local fileList = {}  -- List to store file names on the tape
 
 -- Function to write data to the tape
 local function writeToFile(filename)
@@ -21,20 +22,39 @@ local function writeToFile(filename)
   file:close()
 
   tape.write(data)
+  table.insert(fileList, filename)  -- Add the filename to the list
   print("File '" .. filename .. "' written to tape.")
 end
 
 -- Function to read data from the tape
-local function readFromFile(filename)
-  local data = tape.read(tape.getSize())
+local function readFromFile()
+  if #fileList == 0 then
+    print("No files on the tape.")
+    return
+  end
 
-  if data then
-    local file = io.open(filename, "w")
-    file:write(data)
-    file:close()
-    print("File '" .. filename .. "' read from tape.")
+  print("Files on the tape:")
+  for i, filename in ipairs(fileList) do
+    print(i .. ". " .. filename)
+  end
+
+  io.write("Enter the number of the file to read: ")
+  local fileNumber = tonumber(io.read())
+
+  if fileNumber and fileList[fileNumber] then
+    local filename = fileList[fileNumber]
+    local data = tape.read(tape.getSize())
+
+    if data then
+      local file = io.open(filename, "w")
+      file:write(data)
+      file:close()
+      print("File '" .. filename .. "' read from tape.")
+    else
+      print("Failed to read file from tape.")
+    end
   else
-    print("No tape detected or tape is empty.")
+    print("Invalid file number.")
   end
 end
 
@@ -53,9 +73,7 @@ while true do
     local filename = io.read()
     writeToFile(filename)
   elseif option == 2 then
-    io.write("Enter the filename to read from tape: ")
-    local filename = io.read()
-    readFromFile(filename)
+    readFromFile()
   elseif option == 3 then
     print("Exiting program.")
     break
