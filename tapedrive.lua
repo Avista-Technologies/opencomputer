@@ -21,6 +21,7 @@ local function writeToFile(filename)
   local data = file:read("*a")
   file:close()
 
+  tape.seek(-tape.getSize())  -- Move to the beginning of the tape
   tape.write(data)
   table.insert(fileList, filename)  -- Add the filename to the list
   print("File '" .. filename .. "' written to tape.")
@@ -43,6 +44,8 @@ local function readFromFile()
 
   if fileNumber and fileList[fileNumber] then
     local filename = fileList[fileNumber]
+    
+    tape.seek(-tape.getSize())  -- Move to the beginning of the tape
     local data = tape.read(tape.getSize())
 
     if data then
