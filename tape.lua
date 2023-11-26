@@ -5,7 +5,6 @@ local k = require("keyboard")
 local shell = require("shell")
 local sides = require("sides")
 local filesystem = require("filesystem")
-local rs = component.redstone
 
 local td = component.tape_drive
 local g = component.gpu
