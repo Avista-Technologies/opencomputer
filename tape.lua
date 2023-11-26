@@ -29,7 +29,7 @@ sf(c("#55FF88"))
 sb(c("#000000"))
 
 term.setCursor(3,2)
-term.write("Hello! please insert a cassette tape..")
+term.write("Insert a cassette tape..")
 
 repeat
     tapeready = td.isReady()
@@ -233,7 +233,7 @@ repeat
     term.setCursor(5,24)
     term.write("L = Loop, P = Play, S = Stop, R = Rewind, T = Change Label, ")
     sf(c("#ff8a8a"))
-    term.write("Q = Quit")
+    term.write("R = Reload")
     td.play()
     i = 1
     repeat
@@ -317,10 +317,10 @@ repeat
         end
         t3 = keyrewind
 
-        local keyquit = k.isKeyDown("q")
+        local keyquit = k.isKeyDown("r")
 
         if keyquit and not t4 then
-            computer.beep(200,0.5)
+            computer.beep(200,2)
             os.sleep(0.5)
             jjs = 1
             td.stop()
