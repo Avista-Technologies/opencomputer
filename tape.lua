@@ -69,7 +69,7 @@ repeat
         end
         term.clear()
         term.setCursor(0,0)
-        print(tapesize2,"/",tapesize,read)
+        print(tapesize2,"/",tapesize,read,"  searching for beginning ending header byte...")
     until readfail > 0 or tapesize2 > tapesize
 
     td.seek(tapesize)
@@ -85,7 +85,7 @@ repeat
         end
         term.clear()
         term.setCursor(0,0)
-        print(tapesize3,"/",tapesize,read)
+        print(tapesize3,"/",tapesize,read,"  searching for average ending header byte...")
     until readfail > 0 or tapesize3 > tapesize
 
     td.seek(tapesize)
@@ -102,7 +102,7 @@ repeat
         end
         term.clear()
         term.setCursor(0,0)
-        print(tapesize4,"/",tapesize,read)
+        print(tapesize4,"/",tapesize,read,"  searching for final ending header byte...")
     until readfail > 0 or tapesize4 > tapesize
     if not filesystem.exists("/home/darkconfig.txt") then
         darkconfig = io.open("/home/darkconfig.txt", "w")
